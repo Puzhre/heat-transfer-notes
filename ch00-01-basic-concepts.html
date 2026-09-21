@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>导论 · 第1讲：基本概念（动能理论、温度与热量）</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --fg: #1c1b19;
+      --muted: #5c574f;
+      --accent: #0b5f6b;
+      --rule: #d9d2c5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC",
+                   "Helvetica Neue", sans-serif;
+      color: var(--fg);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, #e8f2f3 0%, transparent 55%),
+        radial-gradient(900px 400px at 100% 0%, #f3ebe0 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.7;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 4rem;
+    }
+    h1, h2, h3 {
+      font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", serif;
+      line-height: 1.35;
+      color: var(--accent);
+    }
+    h1 { font-size: 1.9rem; margin-bottom: 0.4rem; }
+    h2 {
+      font-size: 1.35rem;
+      margin-top: 2rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    h3 { font-size: 1.1rem; margin-top: 1.4rem; color: var(--fg); }
+    p, li { font-size: 1.02rem; }
+    .meta { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0;
+      font-size: 0.98rem;
+    }
+    th, td {
+      border: 1px solid var(--rule);
+      padding: 0.45rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #efeae2; }
+    blockquote {
+      margin: 1rem 0;
+      padding: 0.6rem 1rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(11, 95, 107, 0.06);
+      color: var(--muted);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.92em;
+      background: #efeae2;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+    pre {
+      background: #1c1b19;
+      color: #f7f4ef;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+    pre code { background: transparent; color: inherit; padding: 0; }
+    .mjx-chtml { font-size: 110% !important; }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
+    .nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0 0;
+      padding: 0.75rem 0.85rem;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+    }
+    .nav a, .nav span {
+      text-decoration: none;
+      font-size: 0.92rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--rule);
+      color: var(--fg);
+      background: #fff;
+    }
+    .nav a:hover { border-color: var(--accent); color: var(--accent); }
+    .nav .toc {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .nav .toc:hover { opacity: 0.92; color: #fff; }
+    .nav .disabled {
+      color: #a39e94;
+      background: #f0ebe3;
+      border-style: dashed;
+    }
+    .nav-center { margin-left: auto; margin-right: auto; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="1">导论 · 第1讲：基本概念（动能理论、温度与热量）</h1>
+<blockquote>
+<p>对应讲义：<code>VM530-Course Intro.pdf</code>（约 p.1–p.11）<br>
+课程：ME6301J Advanced Heat Transfer<br>
+日期：2026-09-21</p>
+</blockquote>
+<hr>
+<h2 id="1_1">1. 本讲目标</h2>
+<ul>
+<li>知道本课覆盖导热、对流、辐射，以及控制方程的微分形式</li>
+<li>用气体动能理论理解压力、温度与热能</li>
+<li>分清热能、焓、显热、潜热</li>
+</ul>
+<p>课程考核（大纲）：作业 25、论文/项目 15、期中 30、期末 30。作业不接受迟交。</p>
+<hr>
+<h2 id="2">2. 气体动能理论：四个假设</h2>
+<p>这是解释气体热力学行为的最简模型。假设：</p>
+<ol>
+<li>分子尺寸远小于分子间距</li>
+<li>碰撞时间远小于自由飞行时间</li>
+<li>碰撞为弹性碰撞</li>
+<li>分子间作用力及其他场力可忽略</li>
+</ol>
+<p>量级（讲义给出的直觉）：</p>
+<table>
+<thead>
+<tr>
+<th>量</th>
+<th>量级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分子尺寸</td>
+<td>$\sim 10^{-10}\,\mathrm{m}$</td>
+</tr>
+<tr>
+<td>分子间距</td>
+<td>$\sim 10^{-9}\,\mathrm{m}$</td>
+</tr>
+<tr>
+<td>平均自由程</td>
+<td>$\sim 10^{-7}\,\mathrm{m}$</td>
+</tr>
+<tr>
+<td>分子速率</td>
+<td>$\sim 500\,\mathrm{m/s}$</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="3">3. 压力：分子撞壁</h2>
+<p>考虑边长 $L$、体积 $V=L^3$、分子数 $N$、分子质量 $m$ 的容器。各向同性时 $\bar{u}_x=\bar{u}_y=\bar{u}_z$。</p>
+<p>一次碰撞的动量改变、两次撞同一壁的时间间隔为</p>
+<p>$$
+\Delta M = 2m\bar{u}_x,
+\qquad
+\Delta t = \frac{2L}{\bar{u}_x}.
+$$</p>
+<p>$N$ 个分子对一面壁的合力与压力：</p>
+<p>$$
+F = N\frac{\Delta M}{\Delta t} = \frac{Nm\bar{u}_x^2}{L}.
+$$</p>
+<p>利用 $\bar{u}^2=\bar{u}_x^2+\bar{u}_y^2+\bar{u}_z^2$，且各向同性 $\bar{u}_x^2=\bar{u}^2/3$：</p>
+<p>$$
+P = \frac{F}{L^2} = \frac{Nm\bar{u}^2}{3V}.
+$$</p>
+<p><strong>物理图像：</strong> 压力是分子撞击表面、单位面积上的力，来自动量变化率，不是“分子挤在一起的静压力”这种模糊说法。</p>
+<hr>
+<h2 id="4">4. 温度：平均动能的度量</h2>
+<p>理想气体定律</p>
+<p>$$
+PV = Nk_B T,
+$$</p>
+<p>其中 $k_B$ 为玻尔兹曼常数。与上一节的压力公式对照：</p>
+<p>$$
+PV = \frac{Nm\bar{u}^2}{3}
+\quad\Rightarrow\quad
+T = \frac{m\bar{u}^2}{3k_B}.
+$$</p>
+<p>温度反映物质中分子的<strong>平均动能</strong>。运动形式随相态而变：</p>
+<ul>
+<li>气体：平动</li>
+<li>液体：短程平动 + 局部瞬时振动</li>
+<li>固体：振动</li>
+</ul>
+<p>熔化、蒸发时输入的热量<strong>主要不</strong>变成分子动能（温度可以几乎不变），而是用来克服分子间作用、改变相态。这就是下一节的潜热。</p>
+<hr>
+<h2 id="5-e-h">5. 热能 $E$ 与焓 $H$</h2>
+<h3 id="51">5.1 热能</h3>
+<p>全部分子动能之和（单原子理想气体的平动热能）：</p>
+<p>$$
+E = N\frac{m\bar{u}^2}{2} = \frac{3}{2}Nk_B T.
+$$</p>
+<p>从绝对零度建立当前内能状态所需能量，工程上常写成</p>
+<p>$$
+\Delta E = m c_v \Delta T.
+$$</p>
+<h3 id="52">5.2 焓</h3>
+<p>除建立内能状态外，还要“撑开”体积 $PV$：</p>
+<p>$$
+\Delta H = \Delta(E+PV) = m c_p \Delta T.
+$$</p>
+<p>比热关系：</p>
+<ul>
+<li>固、液：$c_p \approx c_v$（体积几乎不变，$PV$ 项贡献小）</li>
+<li>气体：$c_p - c_v = R &gt; 0$</li>
+</ul>
+<h3 id="53">5.3 总能量里，热能占哪一块</h3>
+<p>$$
+E_{\mathrm{tot}}
+=
+\underbrace{E_{\mathrm{mech}}}_{\text{宏观动能}+\text{势能}}
++
+\underbrace{U}_{\text{内能}}.
+$$</p>
+<p>内能再拆成：</p>
+<table>
+<thead>
+<tr>
+<th>分量</th>
+<th>来源</th>
+<th>是否算作本课所说的热能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>显热 $U_{\mathrm{sens}}$</td>
+<td>原子/分子的平动、转动、振动</td>
+<td>是</td>
+</tr>
+<tr>
+<td>潜热 $U_{\mathrm{lat}}$</td>
+<td>相变相关的分子间作用</td>
+<td>是（广义热）</td>
+</tr>
+<tr>
+<td>化学能</td>
+<td>原子间化学键</td>
+<td>一般另计</td>
+</tr>
+<tr>
+<td>核能</td>
+<td>核内结合</td>
+<td>一般另计</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="6-q">6. 热量 $Q$：跨边界传递的能量</h2>
+<p>热量是穿过热力学系统<strong>边界</strong>的能量传递形式，不是系统“含有”的状态量。</p>
+<p><strong>显热</strong>（伴随温度变化）：</p>
+<p>$$
+Q_{\mathrm{sensible}} = mc(T_2-T_1).
+$$</p>
+<ul>
+<li>定容过程：$c=c_v$</li>
+<li>定压过程：$c=c_p$</li>
+</ul>
+<p><strong>潜热</strong>（温度几乎不变）：</p>
+<p>$$
+Q_{\mathrm{latent}} = m(h_{\mathrm{phase},2}-h_{\mathrm{phase},1}).
+$$</p>
+<p>液体比热往往高于固体和气体，讲义给出的直觉是：</p>
+<ul>
+<li>固、气：热量主要进入动能，运动自由度较少（振动或平动）</li>
+<li>液体：热量同时进入动能和势能，运动自由度更多（振动、平动、转动）</li>
+</ul>
+<hr>
+<h2 id="7">7. 公式速记卡</h2>
+<p>$$
+P = \frac{Nm\bar{u}^2}{3V},
+\qquad
+T = \frac{m\bar{u}^2}{3k_B},
+\qquad
+E = \frac{3}{2}Nk_B T
+$$</p>
+<p>$$
+\Delta E = mc_v\Delta T,
+\qquad
+\Delta H = mc_p\Delta T,
+\qquad
+Q_{\mathrm{sensible}}=mc\Delta T
+$$</p>
+<hr>
+<h2 id="8">8. 自测题</h2>
+<p><strong>Q1.</strong> 由 $P=Nm\bar{u}^2/(3V)$ 和 $PV=Nk_BT$，温度与分子平均速率平方是什么关系？</p>
+<p><strong>Q2.</strong> 为什么气体有 $c_p&gt;c_v$，而固、液常常 $c_p\approx c_v$？</p>
+<p><strong>Q3.</strong> 冰在 $0^\circ\mathrm{C}$ 熔化时，系统温度不变。输入的热量主要变成了什么？</p>
+    <nav class="nav"><span class="disabled">← 上一节</span><span class="nav-center"><a class="toc" href="index.html">目录</a></span><span class="disabled">下一节 →</span></nav>
+  </main>
+</body>
+</html>
